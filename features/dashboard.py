@@ -1,9 +1,13 @@
 import streamlit as st
 import pandas as pd
 
+CAMINHO_CSV = "data/equipamentos.csv"
+
+
 @st.cache_data
 def carregar_equipamentos():
-    return pd.read_csv("data/equipamentos.csv")
+    return pd.read_csv(CAMINHO_CSV)
+
 
 def render_dashboard():
     st.title("Consulta de Equipamentos")
@@ -14,6 +18,11 @@ def render_dashboard():
     )
 
     df = carregar_equipamentos()
+
+    if df.empty:
+        st.warning("Nenhum equipamento cadastrado ainda.")
+        st.info("Acesse o menu Cadastro Técnico para registrar o primeiro equipamento.")
+        return
 
     st.subheader("Equipamentos cadastrados")
     st.dataframe(df, use_container_width=True)
@@ -43,9 +52,42 @@ def render_dashboard():
         st.metric("Tensão", f"{equipamento['tensao']} V")
         st.metric("RPM", f"{equipamento['rpm']} RPM")
 
+    st.subheader("Dados técnicos completos")
+
+    st.table(
+        {
+            "Campo": [
+                "TAG",
+                "Modelo",
+                "Fabricante",
+                "Potência",
+                "Tensão",
+                "Corrente nominal",
+                "RPM",
+                "Status",
+            ],
+            "Valor": [
+                equipamento["tag"],
+                equipamento["modelo"],
+                equipamento["fabricante"],
+                f"{equipamento['potencia']} CV",
+                f"{equipamento['tensao']} V",
+                f"{equipamento['corrente_nominal']} A",
+                f"{equipamento['rpm']} RPM",
+                equipamento["status"],
+            ],
+        }
+    )
+
     if equipamento["status"] == "Ativo":
         st.success("Equipamento em operação normal.")
     elif equipamento["status"] == "Manutenção":
         st.warning("Equipamento em manutenção.")
+    elif equipamento["status"] == "Inativo":
+        st.error("Equipamento inativo.")
     else:
         st.info("Status do equipamento indefinido.")
+
+    st.info(
+        "Use o menu lateral para acessar o Cadastro Técnico ou os Dados Brutos do Ativo."
+    )

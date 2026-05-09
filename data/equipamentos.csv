@@ -1,4 +1,4 @@
 tag,modelo,fabricante,potencia,tensao,corrente_nominal,rpm,status
-MTR-001,W22,WEG,15,220,38,1750,Ativo
-MTR-002,IR3,Siemens,10,380,22,1800,Ativo
-MTR-003,MAXX,ABB,20,440,41,1760,Manutenção
+MTR-001,W22,WEG,15.0,220,38.0,1750,Ativo
+MTR-002,IR3,Siemens,10.0,380,22.0,1800,Ativo
+MTR-003,MAXX,ABB,20.0,440,41.0,1760,Manutenção
